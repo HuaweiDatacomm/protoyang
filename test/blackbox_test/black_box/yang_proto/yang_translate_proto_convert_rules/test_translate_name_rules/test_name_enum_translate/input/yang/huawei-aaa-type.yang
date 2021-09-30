@@ -1,0 +1,497 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+submodule huawei-aaa-type {
+  belongs-to huawei-aaa {
+    prefix aaa;
+  }
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Description of aaa type submodule";
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-12-23 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2013-01-01 {
+    description
+      "Init revision";
+    reference
+      "Huawei private.";
+  }
+  typedef aaaAuthenStateType {
+    type enumeration {
+      enum "idle" {
+        description
+          "idle.";
+      }
+      enum "authenticating" {
+        description
+          "authenticating.";
+      }
+      enum "success" {
+        description
+          "success.";
+      }
+      enum "failed" {
+        description
+          "failed.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaCmdAccessType {
+    type enumeration {
+      enum "allow" {
+        description
+          "";
+      }
+      enum "reject" {
+        description
+          "";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthenMode {
+    type enumeration {
+      enum "invalid" {
+        description
+          "invalid authentication mode.";
+      }
+      enum "local" {
+        description
+          "Local authentication mode.";
+      }
+      enum "hwtacacs" {
+        description
+          "HWTACACS authentication mode. ";
+      }
+      enum "radius" {
+        description
+          "RADIUS authentication mode. ";
+      }
+      enum "none" {
+        description
+          "In this mode, users can pass with authentication.";
+      }
+      enum "radius-proxy" {
+        description
+          "RADIUS proxy authentication mode.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthorMode {
+    type enumeration {
+      enum "invalid" {
+        description
+          "Specifies that the invalid mode is applied.";
+      }
+      enum "local" {
+        description
+          "Specifies that the local mode is applied.";
+      }
+      enum "hwtacacs" {
+        description
+          "Specifies that the HWTACACS mode is applied.";
+      }
+      enum "if-authenticated" {
+        description
+          "Specifies that the If-authenticated mode is adopted. If users pass the authentication and the authentication is not in this mode, it indicates that the user authorization is passed. Otherwise, the authorization is not passed.";
+      }
+      enum "none" {
+        description
+          "Users can pass without authorization.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthorCmdMode {
+    type enumeration {
+      enum "invalid" {
+        description
+          "Specifies that the invalid mode is applied.";
+      }
+      enum "local" {
+        description
+          "Specifies that the local mode is applied.";
+      }
+      enum "hwtacacs" {
+        description
+          "Specifies that the HWTACACS mode is applied.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAcctMode {
+    type enumeration {
+      enum "invalid" {
+        description
+          "invalid accounting mode.";
+      }
+      enum "radius" {
+        description
+          "RADIUS accounting mode. ";
+      }
+      enum "hwtacacs" {
+        description
+          "HWTACACS accounting mode. ";
+      }
+      enum "none" {
+        description
+          "In this mode, users do not be accounting.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaStateType {
+    type enumeration {
+      enum "block" {
+        description
+          "Blocked state.";
+      }
+      enum "active" {
+        description
+          "Activated state.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaEnableType {
+    type enumeration {
+      enum "disable" {
+        description
+          "Disabled state.";
+      }
+      enum "enable" {
+        description
+          "Enabled state.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthenAccessType {
+    type enumeration {
+      enum "admin" {
+        description
+          "User authentication type admin.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaUserAccessType {
+    type enumeration {
+      enum "invalid" {
+        description
+          "invalid user access type.";
+      }
+      enum "terminal" {
+        description
+          "terminal user access type.
+";
+      }
+      enum "telnet" {
+        description
+          "User access type is telnet.
+";
+      }
+      enum "ftp" {
+        description
+          "User access type ftp.";
+      }
+      enum "ppp" {
+        description
+          "User access type ppp.";
+      }
+      enum "ssh" {
+        description
+          "User access type ssh.";
+      }
+      enum "qx" {
+        description
+          "User access type qx.";
+      }
+      enum "snmp" {
+        description
+          "User access type snmp.";
+      }
+      enum "mml" {
+        description
+          "User access type mml.";
+      }
+      enum "dot1x" {
+        description
+          "User access type dot1x.";
+      }
+      enum "http" {
+        description
+          "User access type http.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthorStateType {
+    type enumeration {
+      enum "idle" {
+        description
+          "idle.";
+      }
+	  enum "idle" {
+        description
+          "idle.";
+      }
+      enum "!@auth!oring" {
+        description
+          "authoring.";
+      }
+      enum "suc-cess" {
+        description
+          "success.";
+      }
+      enum "fail12ed" {
+        description
+          "failed.";
+      }
+	  enum "12iled" {
+        description
+          "failed.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAcctStateType {
+    type enumeration {
+      enum "startIdle" {
+        description
+          "Accounting is not start.";
+      }
+      enum "startWait" {
+        description
+          "Waiting for the ack of accounting start form server.";
+      }
+      enum "accounting" {
+        description
+          "Accounting.";
+      }
+      enum "startFailed" {
+        description
+          "Accounting failed.";
+      }
+      enum "stopIdle" {
+        description
+          "Stop accounting idle.";
+      }
+      enum "stopWait" {
+        description
+          "Waiting for the ack of accounting stop form server.";
+      }
+      enum "finished" {
+        description
+          "Accounting is finished.";
+      }
+      enum "failed" {
+        description
+          "Accounting is failed.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaPwdModeType {
+    type enumeration {
+      enum "cipher" {
+        description
+          "Cipher PasswordType.";
+      }
+      enum "irreversible-cipher" {
+        description
+          "Irreversible-cipher PasswordType.";
+      }
+    }
+    description
+      "";
+  }
+  typedef isPassExpiredType {
+    type enumeration {
+      enum "noConfig" {
+        description
+          "not config.";
+      }
+      enum "unexpired" {
+        description
+          "unexpired";
+      }
+      enum "expired" {
+        description
+          "expired";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaBoolType {
+    type enumeration {
+      enum "noConfig" {
+        description
+          "not Config.";
+      }
+      enum "no" {
+        description
+          "no.";
+      }
+      enum "yes" {
+        description
+          "yes.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaDomainLocationType {
+    type enumeration {
+      enum "after-delimiter" {
+        description
+          "Parse domain name after delimiter.";
+      }
+      enum "before-delimiter" {
+        description
+          "Parse domain name befor delimiter.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaParseDirectionType {
+    type enumeration {
+      enum "left-to-right" {
+        description
+          "Parse domain name from left to right.";
+      }
+      enum "right-to-left" {
+        description
+          "Parse domain name from right to  left.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaParsePriorityType {
+    type enumeration {
+      enum "domain-first" {
+        description
+          "Indicates that a domain name is parsed preferentially.";
+      }
+      enum "realm-first" {
+        description
+          "Indicates that a realm name is parsed preferentially.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaRealmLocationType {
+    type enumeration {
+      enum "after-delimiter" {
+        description
+          "Parses the realm name after a delimiter.";
+      }
+      enum "before-delimiter" {
+        description
+          "Parses the realm name before a delimiter.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaGlobalAuthenMode {
+    type enumeration {
+      enum "local" {
+        description
+          "Local mode.";
+      }
+      enum "radius-local" {
+        description
+          "First radius and then local mode.";
+      }
+    }
+    description
+      "";
+  }
+  typedef aaaAuthenticationType {
+    type enumeration {
+      enum "pap" {
+        description
+          "Password Authentication Protocol.";
+      }
+      enum "ms-chap-v1" {
+        description
+          "Microsoft Challenge Handshake Authentication Protocol version 1.";
+      }
+    }
+    description
+      "";
+  }
+  typedef authorNoResPolicyType {
+    type enumeration {
+      enum "online" {
+        description
+          "Indicates that a user is online.";
+      }
+      enum "offline" {
+        description
+          "Indicates that a user is offline.";
+      }
+    }
+    description
+      "Configures a policy used of the command line-based authorization";
+  }
+  typedef offlineRecordType {
+    type enumeration {
+      enum "onlineFail" {
+        description
+          "onlineFail.";
+      }
+      enum "offline" {
+        description
+          "offline.";
+      }
+      enum "abnormalOffline" {
+        description
+          "abnormalOffline.";
+      }
+    }
+    description
+      "";
+  }
+}

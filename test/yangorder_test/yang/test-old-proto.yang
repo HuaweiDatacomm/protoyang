@@ -1,0 +1,136 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module test-old-proto {
+  namespace "http://www.huawei.com/netconf/vrp/test-old-proto";
+  prefix test_old_proto;
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  
+  grouping aaa_lam_type {
+    description
+      "";
+    container loginFailedLimit {
+      description
+        "Login failed times limit in special period.";
+      leaf failedTimes {
+        type uint64 {
+          range "0..10";
+        }
+        default "5";
+        description
+          "Indicates the consecutive failure times. 0 indicates that the number of times for a user to fail the authentification continuously is not restricted.";
+      }
+      leaf period {
+        type uint64 {
+          range "1..120";
+        }
+        must "(../failedTimes) or (not(../failedTimes) and not(../period))";
+        default "5";
+        description
+          "Specifies a period for consecutive authentication failures, in minutes. The default value is five minutes.";
+      }
+      leaf reactiveTime {
+        type uint64 {
+          range "0..1000";
+        }
+        default "5";
+        description
+          "Specifies an automatic activation time for a locked account, in minutes. The default value is five minutes. 0 indicates that the locked account will not be unlocked automatically.";
+      }
+    }
+  }
+  
+  grouping bbb{
+    description "bbb";
+    container userSecurityPolicy {
+      description
+        "Local-user security policy.";
+      leaf securityPolicy {
+        type boolean;
+        default "true";
+        description
+          "Enable or disable the local user security policy function.";
+      }
+      leaf userAgingPeriod {
+        type uint64 {
+          range "1..365";
+        }
+        description
+          "The period of user-age.";
+      }
+      leaf userNameMinLen {
+        type uint64 {
+          range "1..253";
+        }
+        description
+          "The minumum length of username.";
+      }
+      leaf loginTimes {
+        type uint64 {
+          range "1..253";
+        }
+        description
+          "The login times of user.";
+      }
+    }
+  }
+
+  typedef statusType {
+    type enumeration {
+      enum "d" {
+        description
+          "status d";
+      }
+      enum "c" {
+        description
+          "status c";
+      }
+      enum "b" {
+        description
+          "status b";
+          value 3;
+      }
+      enum "a" {
+        description
+          "status a";
+          value 7;
+      }
+      enum "f" {
+        description
+          "status a";
+      }
+      enum "g" {
+        description
+          "status a";
+          value 9;
+      }
+    }
+    description
+      "";
+  }
+  
+  container lam {
+      description
+        "The local account and related policy management functions.";
+      uses aaa_lam_type;
+      leaf current-status {
+        type statusType;
+        description "current status.";
+      }
+      uses bbb;
+  }
+}

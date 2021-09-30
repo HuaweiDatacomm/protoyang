@@ -1,0 +1,49 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module test-augment {
+  namespace "http://www.huawei.com/netconf/vrp/test-augment";
+  prefix test_aug;
+  import test-augment-base {prefix aug-base;}
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  
+  augment "/aug-base:lam/aug-base:userSecurityPolicy" {
+    container receivers {
+        description "receivers";
+        list receiver {
+            key "address port";
+            description "receiver";
+            
+            leaf address {
+                type string;
+                description "address";
+            }
+            leaf port {
+                type uint16;
+                description "port";
+            }
+        }
+    }
+  }
+  
+  augment "/aug-base:lam/aug-base:userSecurityPolicy" {
+     leaf user-name {
+        type string;
+        description "user name";
+     }
+  }
+}

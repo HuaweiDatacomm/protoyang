@@ -1,0 +1,1435 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module huawei-aaa {
+  namespace "http://www.huawei.com/netconf/vrp/huawei-aaa";
+  prefix aaa;
+  import huawei-pub-type {
+    prefix pub-type;
+  }
+  import huawei-hwtacacs {
+    prefix hwtacacs;
+  }
+  import huawei-timerange {
+    prefix timerange;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import huawei-extension {
+    prefix ext;
+  }
+  include huawei-aaa-action;
+  include huawei-aaa-type;
+  include huawei-aaa-lam;
+  include huawei-aaa-lam-action;
+  include huawei-aaa-lam-type;
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-12-23 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2013-01-01 {
+    description
+      "Init revision";
+    reference
+      "Huawei private.";
+  }
+  ext:task-name  "aaa";
+  container aaa {
+    description
+      "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+    container tasks {
+      config false;
+      description
+        "List of tasks.";
+      list task {
+        key "taskName";
+        config false;
+        description
+          "Minimum unit for dividing rights on an NE. Tasks can be determined when an NE is delivered. Tasks cannot be customized.";
+        leaf taskName {
+            type string {
+            length "1..32";
+          }
+          config false;
+          description
+            "Name of a task, it is not case sensitive.";
+        }
+      }
+    }
+    container taskGroups {
+      description
+        "List of task groups.";
+      list taskGroup {
+        key "taskGroupName";
+        description
+          "A collection of certain tasks. The default task groups are set in the system before the NE delivery. ";
+        leaf taskGroupName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Name of a task group, it is not case sensitive.";
+        }
+      }
+    }
+    container userGroups {
+      description
+        "List of user groups.";
+      list userGroup {
+        key "userGroupName";
+        description
+          "A collection of certain users. Certain default user groups are set before an NE is delivered.";
+        leaf userGroupName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Name of a user group, it is not case sensitive.";
+        }
+      }
+    }
+    container taskGroupTaskMaps {
+      description
+        "List of the tasks included in a task group.";
+      list taskGroupTaskMap {
+        key "taskGroupName taskName";
+        description
+          "Task in a task group.";
+        leaf taskGroupName {
+          type leafref {
+            path "../../../taskGroups/taskGroup/taskGroupName";
+          }
+          description
+            "Name of a task group, it is not case sensitive.";
+        }
+        leaf taskName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Name of a task, it is not case sensitive.";
+        }
+        leaf read {
+          type aaaEnableType;
+          must "not(../write='disable' and ../execute='disable' and ../debug='disable') or (../write='disable' and ../execute='disable' and ../debug='disable' and ../read!=../write)";
+          default "disable";
+          description
+            "To determine whether a task has the read right.";
+        }
+        leaf write {
+          type aaaEnableType;
+          default "disable";
+          description
+            "To determine whether a task has the write right.";
+        }
+        leaf execute {
+          type aaaEnableType;
+          default "disable";
+          description
+            "To determine whether a task has the operation right.";
+        }
+        leaf debug {
+          type aaaEnableType;
+          default "disable";
+          description
+            "To determine whether a task has the debug right.";
+        }
+      }
+    }
+    container userGroupTaskGroupMaps {
+      description
+        "List of the task groups included in a user group. ";
+      list userGroupTaskGroupMap {
+        key "userGroupName taskGroupName";
+        description
+          "Task group in a user group. ";
+        leaf userGroupName {
+          type leafref {
+            path "../../../userGroups/userGroup/userGroupName";
+          }
+          description
+            "Name of a user group, it is not case sensitive.";
+        }
+        leaf taskGroupName {
+          type leafref {
+            path "../../../taskGroups/taskGroup/taskGroupName";
+          }
+          description
+            "Name of a task group, it is not case sensitive.";
+        }
+      }
+    }
+    container userGroupIncludeMaps {
+      description
+        "List of the user groups included in a main user group.";
+      list userGroupIncludeMap {
+        key "userGroupName includeUserGroupName";
+        description
+          "User group included in a main user group.";
+        leaf userGroupName {
+          type leafref {
+            path "../../../userGroups/userGroup/userGroupName";
+          }
+          description
+            "Name of main user group, it is not case sensitive.";
+        }
+        leaf includeUserGroupName {
+          type leafref {
+            path "../../../userGroups/userGroup/userGroupName";
+          }
+          description
+            "Name of included user group, it is not case sensitive.";
+        }
+      }
+    }
+    container taskGroupIncludeMaps {
+      description
+        "List of the task groups included in a main task group.";
+      list taskGroupIncludeMap {
+        key "taskGroupName includeTaskGroupName";
+        description
+          "Task group included in a main task group.";
+        leaf taskGroupName {
+          type leafref {
+            path "../../../taskGroups/taskGroup/taskGroupName";
+          }
+          description
+            "Name of main task group, it is not case sensitive.";
+        }
+        leaf includeTaskGroupName {
+          type leafref {
+            path "../../../taskGroups/taskGroup/taskGroupName";
+          }
+          description
+            "Name of included task group, it is not case sensitive.";
+        }
+      }
+    }
+    container authenticationSchemes {
+      description
+        "Authentication scheme list.";
+      list authenticationScheme {
+        key "authenSchemeName";
+        description
+          "Authentication scheme.";
+        leaf authenSchemeName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Name of an authentication scheme, it is not case sensitive.";
+        }
+        leaf firstAuthenMode {
+          type aaaAuthenMode;
+          must "((../firstAuthenMode='local' or ../firstAuthenMode='hwtacacs' or ../firstAuthenMode='radius' or ../firstAuthenMode='none' or ../firstAuthenMode='radius-proxy') )";
+          default "local";
+          description
+            "Preferred authentication mode. The second, third, or fourth authentication mode is used only when the first authentication mode does not respond. The first authentication mode cannot be set to unavailable.";
+        }
+        leaf secondAuthenMode {
+          type aaaAuthenMode;
+          must "(../firstAuthenMode='none' and (../secondAuthenMode='invalid') ) or (../firstAuthenMode='radius-proxy' and (../secondAuthenMode='invalid') ) or (../firstAuthenMode='hwtacacs' and (../secondAuthenMode='invalid' or ../secondAuthenMode='local' or ../secondAuthenMode='radius' or ../secondAuthenMode='none') ) or (../firstAuthenMode='local' and (../secondAuthenMode='invalid' or ../secondAuthenMode='hwtacacs' or ../secondAuthenMode='radius' or ../secondAuthenMode='none') ) or (../firstAuthenMode='radius' and (../secondAuthenMode='invalid' or ../secondAuthenMode='local' or ../secondAuthenMode='hwtacacs' or ../secondAuthenMode='none') )";
+          default "invalid";
+          description
+            "Authentication mode with the preference lower than the first authentication mode. The second authentication mode is used when the first authentication mode does not respond. If the setting of the second authentication mode is unavailable, the third and fourth authentication modes fail to be set.";
+        }
+        leaf thirdAuthenMode {
+          type aaaAuthenMode;
+          must "(../secondAuthenMode ='none' or ../secondAuthenMode='invalid' and (../thirdAuthenMode='invalid') ) or (../secondAuthenMode !='none' and ../secondAuthenMode!='invalid'  and ../firstAuthenMode!='none' and ../firstAuthenMode!='radius-proxy' and ../thirdAuthenMode!=../secondAuthenMode and ../thirdAuthenMode!=../firstAuthenMode ) or (../firstAuthenMode='none' and (../thirdAuthenMode='invalid') ) or (../firstAuthenMode='radius-proxy' and (../thirdAuthenMode='invalid') )";
+          default "invalid";
+          description
+            "Authentication mode with the preference lower than the first and second authentication modes. The third authentication mode is used when the first and second authentication modes do not respond. If the setting of the third authentication mode is unavailable, the fourth authentication mode fails to be set.";
+        }
+        leaf fourthAuthenMode {
+          type aaaAuthenMode;
+          must "(../fourthAuthenMode='none' and ../firstAuthenMode!='invalid' and ../firstAuthenMode!='none' and ../firstAuthenMode!='radius-proxy' and ../secondAuthenMode!='invalid' and ../secondAuthenMode!='none' and ../thirdAuthenMode!='invalid' and ../thirdAuthenMode!='none' ) or ../fourthAuthenMode='invalid' ";
+          default "invalid";
+          description
+            "Authentication mode with the least preference. The fourth authentication mode is used when the first, second, and third authentication modes do not respond. If the setting of the fourth authentication mode is unavailable or the fourth authentication mode does not respond, the authentication fails.";
+        }
+        leaf radiusAuthenticationType {
+          type aaaAuthenticationType;
+          default "pap";
+          description
+            "Authentication type of RADIUS.";
+        }
+      }
+    }
+    container authorizationSchemes {
+      description
+        "Authorization scheme list.";
+      list authorizationScheme {
+        key "authorSchemeName";
+        description
+          "Authorization scheme.";
+        leaf authorSchemeName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Name of an authorization scheme, it is not case sensitive. The name uniquely identifies the authorization scheme and can be used in the domain. ";
+        }
+        leaf firstAuthorMode {
+          type aaaAuthorMode;
+          must "((../firstAuthorMode='local' or ../firstAuthorMode='hwtacacs' or ../firstAuthorMode='if-authenticated' or ../firstAuthorMode='none') )";
+          default "local";
+          description
+            "Preferred authorization mode. The second, third, or fourth authorization mode can be used only when the first authorization mode does not respond. The first authorization mode must be available.";
+        }
+        leaf secondAuthorMode {
+          type aaaAuthorMode;
+          must "(../firstAuthorMode='none' and (../secondAuthorMode='invalid') ) or (../firstAuthorMode!='invalid' and ../firstAuthorMode!='none' and ../secondAuthorMode!=../firstAuthorMode)";
+          default "invalid";
+          description
+            "Authorization mode with the preference next to the first authorization mode. It is used when the first authorization mode does not respond. If the setting of the second authorization mode is unavailable, the third and fourth authorization modes fail to be set.";
+        }
+        leaf thirdAuthorMode {
+          type aaaAuthorMode;
+          must "((../secondAuthorMode='none' or ../secondAuthorMode='invalid') and ../thirdAuthorMode='invalid' ) or (../secondAuthorMode !='none' and ../secondAuthorMode!='invalid'  and ../firstAuthorMode!='none' and ../thirdAuthorMode!=../secondAuthorMode and ../thirdAuthorMode!=../firstAuthorMode ) or (../firstAuthorMode='none' and (../thirdAuthorMode='invalid') )";
+          default "invalid";
+          description
+            "Authorization mode with the preference next to the first and second authorization modes. It is used when the first and second authorization modes do not respond. If the setting of the third authorization mode is unavailable, the fourth authorization mode fails to be set.";
+        }
+        leaf fourthAuthorMode {
+          type aaaAuthorMode;
+          must "(../fourthAuthorMode='none' and ../firstAuthorMode!='invalid' and ../firstAuthorMode!='none' and ../secondAuthorMode!='invalid' and ../secondAuthorMode!='none' and ../thirdAuthorMode!='invalid' and ../thirdAuthorMode!='none' ) or ../fourthAuthorMode='invalid' ";
+          default "invalid";
+          description
+            "Authorization mode with the least preference. It is used when the first, second, and third authorization modes do not respond. If the setting of the fourth authorization mode is unavailable or the fourth authorization mode does not respond, the authorization fails.";
+        }
+        leaf noLvlFirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../noLvlFirstCmdAuthor='local' or ../noLvlFirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Configures the first authorization mode for users of usegroup.";
+        }
+        leaf noLvlSecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../noLvlFirstCmdAuthor='local' and (../noLvlSecondCmdAuthor='invalid' or ../noLvlSecondCmdAuthor='hwtacacs') ) or ((not(../noLvlFirstCmdAuthor='local') and (../noLvlSecondCmdAuthor='invalid' or ../noLvlSecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Configures the second authorization mode for users of Usergroup.";
+        }
+        leaf Lvl0FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl0FirstCmdAuthor='local' or ../Lvl0FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 0 first cmd author.";
+        }
+        leaf Lvl0SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl0FirstCmdAuthor='local' and (../Lvl0SecondCmdAuthor='invalid' or ../Lvl0SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl0FirstCmdAuthor='local') and (../Lvl0SecondCmdAuthor='invalid' or ../Lvl0SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 0 second cmd author.";
+        }
+        leaf Lvl1FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl1FirstCmdAuthor='local' or ../Lvl1FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 1 first cmd author.";
+        }
+        leaf Lvl1SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl1FirstCmdAuthor='local' and (../Lvl1SecondCmdAuthor='invalid' or ../Lvl1SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl1FirstCmdAuthor='local') and (../Lvl1SecondCmdAuthor='invalid' or ../Lvl1SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 1 second cmd author.";
+        }
+        leaf Lvl2FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl2FirstCmdAuthor='local' or ../Lvl2FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 2 first cmd author.";
+        }
+        leaf Lvl2SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl2FirstCmdAuthor='local' and (../Lvl2SecondCmdAuthor='invalid' or ../Lvl2SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl2FirstCmdAuthor='local') and (../Lvl2SecondCmdAuthor='invalid' or ../Lvl2SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 2 second cmd author.";
+        }
+        leaf Lvl3FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl3FirstCmdAuthor='local' or ../Lvl3FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 3 first cmd author.";
+        }
+        leaf Lvl3SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl3FirstCmdAuthor='local' and (../Lvl3SecondCmdAuthor='invalid' or ../Lvl3SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl3FirstCmdAuthor='local') and (../Lvl3SecondCmdAuthor='invalid' or ../Lvl3SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 3 second cmd author.";
+        }
+        leaf Lvl4FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl4FirstCmdAuthor='local' or ../Lvl4FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 4 first cmd author.";
+        }
+        leaf Lvl4SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl4FirstCmdAuthor='local' and (../Lvl4SecondCmdAuthor='invalid' or ../Lvl4SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl4FirstCmdAuthor='local') and (../Lvl4SecondCmdAuthor='invalid' or ../Lvl4SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 4 second cmd author.";
+        }
+        leaf Lvl5FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl5FirstCmdAuthor='local' or ../Lvl5FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 5 first cmd author.";
+        }
+        leaf Lvl5SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl5FirstCmdAuthor='local' and (../Lvl5SecondCmdAuthor='invalid' or ../Lvl5SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl5FirstCmdAuthor='local') and (../Lvl5SecondCmdAuthor='invalid' or ../Lvl5SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 5 second cmd author.";
+        }
+        leaf Lvl6FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl6FirstCmdAuthor='local' or ../Lvl6FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 6 first cmd author.";
+        }
+        leaf Lvl6SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl6FirstCmdAuthor='local' and (../Lvl6SecondCmdAuthor='invalid' or ../Lvl6SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl6FirstCmdAuthor='local') and (../Lvl6SecondCmdAuthor='invalid' or ../Lvl6SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 6 second cmd author.";
+        }
+        leaf Lvl7FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl7FirstCmdAuthor='local' or ../Lvl7FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 7 first cmd author.";
+        }
+        leaf Lvl7SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl7FirstCmdAuthor='local' and (../Lvl7SecondCmdAuthor='invalid' or ../Lvl7SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl7FirstCmdAuthor='local') and (../Lvl7SecondCmdAuthor='invalid' or ../Lvl7SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 7 second cmd author.";
+        }
+        leaf Lvl8FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl8FirstCmdAuthor='local' or ../Lvl8FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 8 first cmd author.";
+        }
+        leaf Lvl8SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl8FirstCmdAuthor='local' and (../Lvl8SecondCmdAuthor='invalid' or ../Lvl8SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl8FirstCmdAuthor='local') and (../Lvl8SecondCmdAuthor='invalid' or ../Lvl8SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 8 second cmd author.";
+        }
+        leaf Lvl9FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl9FirstCmdAuthor='local' or ../Lvl9FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 9 first cmd author.";
+        }
+        leaf Lvl9SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl9FirstCmdAuthor='local' and (../Lvl9SecondCmdAuthor='invalid' or ../Lvl9SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl9FirstCmdAuthor='local') and (../Lvl9SecondCmdAuthor='invalid' or ../Lvl9SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 9 second cmd author.";
+        }
+        leaf Lvl10FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl10FirstCmdAuthor='local' or ../Lvl10FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 10 first cmd author.";
+        }
+        leaf Lvl10SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl10FirstCmdAuthor='local' and (../Lvl10SecondCmdAuthor='invalid' or ../Lvl10SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl10FirstCmdAuthor='local') and (../Lvl10SecondCmdAuthor='invalid' or ../Lvl10SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 10 second cmd author.";
+        }
+        leaf Lvl11FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl11FirstCmdAuthor='local' or ../Lvl11FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 11 first cmd author.";
+        }
+        leaf Lvl11SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl11FirstCmdAuthor='local' and (../Lvl11SecondCmdAuthor='invalid' or ../Lvl11SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl11FirstCmdAuthor='local') and (../Lvl11SecondCmdAuthor='invalid' or ../Lvl11SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 11 second cmd author.";
+        }
+        leaf Lvl12FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl12FirstCmdAuthor='local' or ../Lvl12FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 12 first cmd author.";
+        }
+        leaf Lvl12SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl12FirstCmdAuthor='local' and (../Lvl12SecondCmdAuthor='invalid' or ../Lvl12SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl12FirstCmdAuthor='local') and (../Lvl12SecondCmdAuthor='invalid' or ../Lvl12SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 12 second cmd author.";
+        }
+        leaf Lvl13FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl13FirstCmdAuthor='local' or ../Lvl13FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 13 first cmd author.";
+        }
+        leaf Lvl13SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl13FirstCmdAuthor='local' and (../Lvl13SecondCmdAuthor='invalid' or ../Lvl13SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl13FirstCmdAuthor='local') and (../Lvl13SecondCmdAuthor='invalid' or ../Lvl13SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 13 second cmd author.";
+        }
+        leaf Lvl14FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl14FirstCmdAuthor='local' or ../Lvl14FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 14 first cmd author.";
+        }
+        leaf Lvl14SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl14FirstCmdAuthor='local' and (../Lvl14SecondCmdAuthor='invalid' or ../Lvl14SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl14FirstCmdAuthor='local') and (../Lvl14SecondCmdAuthor='invalid' or ../Lvl14SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 14 second cmd author.";
+        }
+        leaf Lvl15FirstCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "((../Lvl15FirstCmdAuthor='local' or ../Lvl15FirstCmdAuthor='hwtacacs') )";
+          default "local";
+          description
+            "Level 15 first cmd author.";
+        }
+        leaf Lvl15SecondCmdAuthor {
+          type aaaAuthorCmdMode;
+          must "(../Lvl15FirstCmdAuthor='local' and (../Lvl15SecondCmdAuthor='invalid' or ../Lvl15SecondCmdAuthor='hwtacacs') ) or ((not(../Lvl15FirstCmdAuthor='local') and (../Lvl15SecondCmdAuthor='invalid' or ../Lvl15SecondCmdAuthor='local') ))";
+          default "invalid";
+          description
+            "Level 15 second cmd author.";
+        }
+        leaf noResponsePolicy {
+          type authorNoResPolicyType;
+          default "online";
+          description
+            "Configures a policy for a scenario where no responses are obtained during command line-based authorization.";
+        }
+        leaf noResponsetimes {
+          when "../noResponsePolicy='offline'";
+          type uint32 {
+            range "1..10";
+          }
+          default "5";
+          description
+            "Configures the number of times of failed authorization.";
+        }
+      }
+    }
+    container accountingSchemes {
+      description
+        "Accounting scheme list.";
+      list accountingScheme {
+        key "acctSchemeName";
+        description
+          "Accounting scheme.";
+        leaf acctSchemeName {
+            type string {
+            length "1..32";
+          }
+          description
+            "Accounting scheme name, it is not case sensitive.";
+        }
+        leaf accountingMode {
+          type aaaAcctMode;
+          must "((../accountingMode='radius' or ../accountingMode='hwtacacs' or ../accountingMode='none') )";
+          default "none";
+          description
+            "Accounting Mode.";
+        }
+      }
+    }
+    container domains {
+      description
+        "Domain list.";
+      list domain {
+        key "domainName";
+        description
+          "In a domain, users apply the same authentication/authorization scheme or server.";
+        leaf domainName {
+            type string {
+            length "1..64";
+          }
+          description
+            "Name of a domain, it is not case sensitive.";
+        }
+        leaf adminLevel {
+          type uint64 {
+            range "0..15";
+          }
+          description
+            "The admin level of domain. If the command level adjustment function is disabled, the value of adminLevel ranges from 0 to 3. If the command level adjustment function is enabled, the value of adminLevel ranges from 0 to 15.";
+          ext:allowDelete "true";
+        }
+        leaf authenSchemeName {
+          type leafref {
+            path "../../../authenticationSchemes/authenticationScheme/authenSchemeName";
+          }
+          description
+            "Name of the authentication scheme used by the domain, it is not case sensitive. The default value varies according to domains. The default value is restored when the node is deleted.";
+          ext:allowDelete "true";
+        }
+        leaf authorSchemeName {
+          type leafref {
+            path "../../../authorizationSchemes/authorizationScheme/authorSchemeName";
+          }
+          description
+            "Name of the authorization scheme used by the domain, it is not case sensitive. The default value varies according to domains. The default value is restored when the node is deleted.";
+          ext:allowDelete "true";
+        }
+        leaf acctSchemeName {
+          type leafref {
+            path "../../../accountingSchemes/accountingScheme/acctSchemeName";
+          }
+          description
+            "Name of the accounting scheme used by the domain, it is not case sensitive. The default value varies according to domains. The default value is restored when the node is deleted.";
+          ext:allowDelete "true";
+        }
+        leaf accessLimit {
+          type int64 {
+            range "0..2147483647";
+          }
+          description
+            "Domain max access number. The default value is defined in the PAF file and is restored when the node is deleted.";
+          ext:allowDelete "true";
+        }
+        leaf onlineNum {
+          type int64 {
+            range "0..2147483647";
+          }
+          config false;
+          description
+            "Online number of the domain.";
+        }
+        leaf radiusServerTemplate {
+          type string {
+            length "1..32";
+          }
+          description
+            "Name of the RADIUS server used by the domain, it is not case sensitive.";
+          ext:allowDelete "true";
+        }
+        leaf hwTacacsServerTemplate {
+          type leafref {
+            path "/hwtacacs:hwtacacs/hwtacacs:hwTacTempCfgs/hwtacacs:hwTacTempCfg/hwtacacs:templateName";
+          }
+          description
+            "Name of the HWTACACS server used by the domain, it is not case sensitive.";
+          ext:allowDelete "true";
+        }
+        leaf domainState {
+          type aaaStateType;
+          default "active";
+          description
+            "Activated state of the domain.";
+        }
+        leaf dot1xTemplateId {
+          type int64 {
+            range "1..256";
+          }
+          default "1";
+          description
+            "Dot1x Template ID.";
+          ext:allowDelete "true";
+        }
+        leaf serviceTerminal {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in Terminal mode.";
+        }
+        leaf serviceTelnet {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in Telnet mode.";
+        }
+        leaf serviceFtp {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in FTP mode.";
+        }
+        leaf servicePpp {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in PPP mode.";
+        }
+        leaf serviceSsh {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in SSH mode.";
+        }
+        leaf serviceQx {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in QX mode.";
+        }
+        leaf serviceSnmp {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in SNMP mode.";
+        }
+        leaf serviceMml {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in MML mode.";
+        }
+        leaf serviceDot1x {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in DOT1X mode.";
+        }
+        leaf serviceHttp {
+          type boolean;
+          default "true";
+          description
+            "Allows users to log in HTTP mode.";
+        }
+        leaf timeRangeEnable {
+          type boolean;
+          default "false";
+          description
+            "Specifies whether to enable the time range function used by a domain. ";
+        }
+        container timeRanges {
+          description
+            "Specifies an aggregation of times ranges used by a domain. ";
+          list timeRange {
+            key "timeRangeName";
+            description
+              "Specifies a time range used by a domain. ";
+            leaf timeRangeName {
+              type leafref {
+                path "/timerange:timerange/timerange:timeRangeInstances/timerange:timeRangeInstance/timerange:timeRangeName";
+              }
+              description
+                "Specifies a name for the time range used by a domain. ";
+            }
+          }
+        }
+      }
+    }
+    container cmdLevelRearrange {
+      description
+        "Adjust command levels.";
+      leaf isRearrange {
+        type boolean;
+        default "false";
+        description
+          "Action mode for adjusting command levels. Enable or Disable the command level adjustment.";
+        ext:allowDelete "true";
+      }
+    }
+    container loginAlarmThreshold {
+      description
+        "Alarm when manager login failed frequently.";
+      leaf reportTimes {
+        type uint16 {
+          range "0..100";
+        }
+        must "(../resumeTimes and ../resumeTimes<=../reportTimes) or (not(../reportTimes) and not(../resumeTimes))";
+        default "30";
+        description
+          "Login Alarm report times, default is 30 times.  ";
+        ext:allowDelete "true";
+      }
+      leaf resumeTimes {
+        type uint16 {
+          range "0..100";
+        }
+        must "(../reportTimes and ../resumeTimes<=../reportTimes) or (not(../reportTimes) and not(../resumeTimes))";
+        default "20";
+        description
+          "Login Alarm resume times, default is 20 times.";
+        ext:allowDelete "true";
+      }
+      leaf period {
+        type uint16 {
+          range "1..120";
+        }
+        must "(../reportTimes) or (not(../reportTimes) and not(../period))";
+        default "5";
+        description
+          "Login Alarm period, default is 5 minutes.";
+        ext:allowDelete "true";
+      }
+    }
+    container aliveUserQrys {
+      config false;
+      description
+        "Alive user list";
+      list aliveUserQry {
+        key "userId";
+        config false;
+        description
+          "Alive user query to display all the current active users.";
+        leaf userId {
+          type uint32;
+          config false;
+          description
+            "User ID.";
+        }
+        leaf userName {
+          type string {
+            length "1..253";
+          }
+          config false;
+          description
+            "Name of an access user, it is not case sensitive.";
+        }
+        leaf level {
+          type uint64 {
+            range "0..15";
+          }
+          config false;
+          description
+            "User level.";
+        }
+        leaf userGroupName {
+          type string {
+            length "1..32";
+          }
+          config false;
+          description
+            "Specifies the name of a user group, it is not case sensitive.";
+        }
+        leaf domainName {
+          type string {
+            length "1..64";
+          }
+          config false;
+          description
+            "Name of a domain, it is not case sensitive.";
+        }
+        leaf accessType {
+          type aaaUserAccessType;
+          config false;
+          description
+            "Access type.";
+        }
+        leaf authenType {
+          type aaaAuthenAccessType;
+          config false;
+          description
+            "Authentication Type.";
+        }
+        leaf authenMethod {
+          type aaaAuthenMode;
+          config false;
+          description
+            "Alive user current authentication mode.";
+        }
+        leaf authenState {
+          type aaaAuthenStateType;
+          config false;
+          description
+            "Authentication state.";
+        }
+        leaf authorMethod {
+          type aaaAuthorMode;
+          config false;
+          description
+            "Currnet authorization mode.";
+        }
+        leaf authorState {
+          type aaaAuthorStateType;
+          config false;
+          description
+            "Author state.";
+        }
+        leaf acctMethod {
+          type aaaAcctMode;
+          config false;
+          description
+            "Current accounting Mode.";
+        }
+        leaf acctState {
+          type aaaAcctStateType;
+          config false;
+          description
+            "Accounting state.";
+        }
+        leaf appType {
+          type pub-type:appType;
+          config false;
+          description
+            "The type of terminal application, such as LCT, EMS, CMD and UNKNOWN.";
+        }
+      }
+    }
+    container lctUserInterface {
+      description
+        "lct-interface.";
+      leaf isLctEnable {
+        type boolean;
+        default "true";
+        description
+          "lct-enable.";
+        ext:allowDelete "true";
+      }
+      leaf lctWarningInfo {
+        type string {
+          length "0..1500";
+        }
+        description
+          "lct-information.";
+        ext:allowDelete "true";
+      }
+    }
+    container globalPolicy {
+      description
+        "Global Policy.";
+      leaf domainDelimiter {
+        type string {
+          length "1";
+        }
+        default "@";
+        description
+          "Domain Delimiter, the value can be one of the following characters: back-slant, /, :, |, @, ', %, <, and >.";
+        ext:allowDelete "true";
+      }
+      leaf domainLocation {
+        type aaaDomainLocationType;
+        default "after-delimiter";
+        description
+          "Domain Location.";
+        ext:allowDelete "true";
+      }
+      leaf domainParseDirection {
+        type aaaParseDirectionType;
+        default "left-to-right";
+        description
+          "Domain Parse Direction.";
+        ext:allowDelete "true";
+      }
+      leaf defaultAdminDomain {
+        type leafref {
+          path "../../domains/domain/domainName";
+        }
+        default "default_admin";
+        description
+          "Admin user default domain.";
+        ext:allowDelete "true";
+      }
+      leaf defaultAccessDomain {
+        type leafref {
+          path "../../domains/domain/domainName";
+        }
+        default "default1";
+        description
+          "Access user default domain.";
+        ext:allowDelete "true";
+      }
+      leaf parsePriority {
+        type aaaParsePriorityType;
+        default "domain-first";
+        description
+          "Specifies priorities for parsing domain names.";
+        ext:allowDelete "true";
+      }
+      leaf realmLocation {
+        type aaaRealmLocationType;
+        default "before-delimiter";
+        description
+          "Specifies a position for a realm domain name.";
+        ext:allowDelete "true";
+      }
+      leaf realNameDelimiter {
+        type string {
+          length "1";
+        }
+        description
+          "Specifies a realm name delimiter used to parse the user account. The value is a single character. It can be one of the following symbols: back-slant, /, :, <, >, |, @, %, '. ";
+        ext:allowDelete "true";
+      }
+      leaf realNameParseDirection {
+        type aaaParseDirectionType;
+        default "left-to-right";
+        description
+          "Specifies a parsing direction for the realm name.";
+        ext:allowDelete "true";
+      }
+      leaf roamCharacter {
+        type string {
+          length "1";
+        }
+        default ":";
+        description
+          "Specifies an identifier for a roaming user. The value is a single character. It can be one of the following symbols: back-slant, /, :, *, <, >, |. ";
+        ext:allowDelete "true";
+      }
+      leaf terminalForceDomain {
+        type leafref {
+          path "../../domains/domain/domainName";
+        }
+        description
+          "Console user force domain.";
+        ext:allowDelete "true";
+      }
+    }
+    container globalStatistic {
+      config false;
+      description
+        "Global statistic.";
+      leaf maxOnlineUserNum {
+        type uint64;
+        config false;
+        description
+          "Max online users since startup.";
+      }
+      leaf timeOfMaxOnlineNum {
+        type yang:date-and-time;
+        config false;
+        description
+          "Time of max online users. ";
+      }
+      leaf maxAccountingUserNum {
+        type uint64;
+        config false;
+        description
+          "Max accounting-ready users since startup.";
+      }
+      leaf timeOfMaxAccountingNum {
+        type yang:date-and-time;
+        config false;
+        description
+          "Time of max accounting-ready users. ";
+      }
+    }
+    container authenPolicy {
+      description
+        "Authen Policy.";
+      leaf radiusSerGroup {
+        type string {
+          length "1..32";
+        }
+        description
+          "Global Radius.";
+        ext:allowDelete "true";
+      }
+      leaf authenMethod {
+        type aaaGlobalAuthenMode;
+        default "local";
+        description
+          "Global authentication mode.";
+        ext:allowDelete "true";
+      }
+    }
+    container recordingConfig {
+      description
+        "Recording configuration.";
+      container recordingFunction {
+        description
+          "The recording function.";
+        leaf cmdRecordScheme {
+          type leafref {
+            path "../../recordingSchemes/recordingScheme/recordingSchemeName";
+          }
+          description
+            "The recording scheme used by cmd recording.";
+          ext:allowDelete "true";
+        }
+        leaf systemRecordScheme {
+          type leafref {
+            path "../../recordingSchemes/recordingScheme/recordingSchemeName";
+          }
+          description
+            "Configures a solution to record system events. Currently, only events triggered by the reboot command are recorded.";
+          ext:allowDelete "true";
+        }
+        leaf outBoundRecordScheme {
+          type leafref {
+            path "../../recordingSchemes/recordingScheme/recordingSchemeName";
+          }
+          description
+            "Records remote login operations for the device that functions as the client.";
+          ext:allowDelete "true";
+        }
+      }
+      container recordingSchemes {
+        description
+          "Recording scheme list.";
+        list recordingScheme {
+          key "recordingSchemeName";
+          description
+            "Recording scheme.";
+          leaf recordingSchemeName {
+              type string {
+              length "1..32";
+            }
+            description
+              "Recording scheme name, it is not case sensitive.";
+          }
+          leaf recordingTacacsGroup {
+            type leafref {
+              path "/hwtacacs:hwtacacs/hwtacacs:hwTacTempCfgs/hwtacacs:hwTacTempCfg/hwtacacs:templateName";
+            }
+            description
+              "The binded HWTACACS server.";
+            ext:allowDelete "true";
+          }
+        }
+      }
+    }
+    container onlineOfflineRecSwitch {
+      description
+        "Specifies whether to enable login failure and logout recording for management users.";
+      leaf loginFailRecSwitch {
+        type aaaEnableType;
+        default "enable";
+        description
+          "Enables recording of login failures.";
+        ext:allowDelete "true";
+      }
+      leaf logoutRecSwitch {
+        type aaaEnableType;
+        default "enable";
+        description
+          "Enables recording of normal and abnormal logouts.";
+        ext:allowDelete "true";
+      }
+      leaf abnormalLogoutRecSwitch {
+        type aaaEnableType;
+        default "enable";
+        description
+          "Enables recording of abnormal logouts.";
+        ext:allowDelete "true";
+      }
+      leaf normalLogoutRecSwitch {
+        type aaaEnableType;
+        default "enable";
+        description
+          "Enables recording of normal logouts.";
+        ext:allowDelete "true";
+      }
+    }
+    container abnormalOfflineHidens {
+      description
+        "Enables the function that replaces the abnormal offline reason with 'the user requests to go offline'. ";
+      list abnormalOfflineHiden {
+        key "hiddenID";
+        description
+          "Enables the function that replaces the abnormal offline reason with 'the user requests to go offline'. ";
+        leaf hiddenID {
+          type uint32 {
+            range "2..18";
+          }
+          description
+            "Specifies an ID for an abnormal logout reason.";
+        }
+      }
+    }
+    container lam {
+      description
+        "The local account and related policy management functions.";
+      uses aaa:aaa_lam_type;
+    }
+    container localAaaServer {
+      description
+        "Indicates a local AAA server. You can perform access security configurations for local users.";
+      uses aaa:aaa_localAaaServer_type;
+    }
+    container onlineFailQrys {
+      config false;
+      description
+        "Online fail qrys.";
+      list onlineFailQry {
+        key "userId";
+        config false;
+        description
+          "Online fail qry.";
+        leaf userId {
+          type uint16;
+          config false;
+          description
+            "UserId";
+        }
+        leaf userName {
+          type string {
+            length "1..253";
+          }
+          config false;
+          description
+            "Name of an access user.";
+        }
+        leaf domainName {
+          type string {
+            length "1..64";
+          }
+          config false;
+          description
+            "Name of a domain.";
+        }
+        leaf accessType {
+          type aaaUserAccessType;
+          config false;
+          description
+            "Access type.";
+        }
+        leaf authenState {
+          type aaaAuthenStateType;
+          config false;
+          description
+            "Authentication state.";
+        }
+        leaf authorState {
+          type aaaAuthorStateType;
+          config false;
+          description
+            "Author state.";
+        }
+        leaf userIP {
+          type inet:ip-address-no-zone;
+          config false;
+          description
+            "User IP address.";
+        }
+        leaf userLoginTime {
+          type yang:date-and-time;
+          config false;
+          description
+            "User login time.";
+        }
+        leaf onlineFailReason {
+          type string {
+            length "1..128";
+          }
+          config false;
+          description
+            "Online fail reason.";
+        }
+      }
+    }
+    container offlineQrys {
+      config false;
+      description
+        "Offline qrys.";
+      list offlineQry {
+        config false;
+        description
+          "Offline qry.";
+        leaf offlineQry {
+          type uint16;
+          config false;
+          description
+            "UserId";
+        }
+        leaf offlineQry {
+          type string {
+            length "1..253";
+          }
+          config false;
+          description
+            "Name of an access user.";
+        }
+        leaf string {
+          type string {
+            length "1..64";
+          }
+          config false;
+          description
+            "Name of a domain.";
+        }
+        leaf accessType {
+          type aaaUserAccessType;
+          config false;
+          description
+            "Access type.";
+        }
+        leaf authenState {
+          type aaaAuthenStateType;
+          config false;
+          description
+            "Authentication state.";
+        }
+        leaf authorState {
+          type aaaAuthorStateType;
+          config false;
+          description
+            "Author state.";
+        }
+        leaf userIP {
+          type inet:ip-address-no-zone;
+          config false;
+          description
+            "User IP address.";
+        }
+        leaf userLoginTime {
+          type yang:date-and-time;
+          config false;
+          description
+            "User login time.";
+        }
+        leaf userLogoutTime {
+          type yang:date-and-time;
+          config false;
+          description
+            "User logout time.";
+        }
+        leaf offlineReason {
+          type string {
+            length "1..128";
+          }
+          config false;
+          description
+            "Offline reason.";
+        }
+      }
+    }
+    container _abnorm-al_Offline-Qrys {
+      config false;
+      list _abnorm-al_Offline-Qry{
+        key "userId";
+        config false;
+        leaf userId {
+          type uint16;
+          config false;
+          description
+            "";
+        }
+        leaf u-serName {
+          type string {
+            length "1..253";
+          }
+          config false;
+          description
+            "";
+        }
+        leaf domainName {
+          type string {
+            length "1..64";
+          }
+          config false;
+          description
+            "";
+        }
+        leaf accessType {
+          type aaaUserAccessType;
+          config false;
+          description
+            "";
+        }
+        leaf authenState {
+          type aaaAuthenStateType;
+          config false;
+          description
+            "";
+        }
+        leaf authorState {
+          type aaaAuthorStateType;
+          config false;
+          description
+            "";
+        }
+        leaf userIP {
+          type inet:ip-address-no-zone;
+          config false;
+          description
+            "";
+        }
+        leaf userLoginTime {
+          type yang:date-and-time;
+          config false;
+          description
+            "";
+        }
+        leaf userLogoutTime {
+          type yang:date-and-time;
+          config false;
+          description
+            "";
+        }
+        leaf offlineReason {
+          type string {
+            length "1..128";
+          }
+          config false;
+          description
+            "";
+        }
+		leaf xpath-filter {
+        if-feature "xpath";
+        type yang:xpath1.0;
+        description
+          "Event stream evaluation criteria encoded in a syntax of xpath
+           1.0 and applied against an event stream. The result of
+           applying XPath expression is converted to a boolean value
+           using the standard XPath 1.0 rules.  If the boolean value is
+           'true', the stream filter matches an event record within the
+           stream, and the notification message should be sent to the
+           receiver(s).";
+        }
+      }
+    }
+  }
+}

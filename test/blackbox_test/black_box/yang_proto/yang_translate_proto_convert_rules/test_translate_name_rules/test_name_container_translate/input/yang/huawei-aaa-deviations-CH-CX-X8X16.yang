@@ -1,0 +1,178 @@
+module huawei-aaa-deviations-CH-CX-X8X16 {
+  namespace "http://www.huawei.com/netconf/vrp/huawei-aaa-deviations-CH-CX-X8X16";
+  prefix aaa-devs-CH-CX-X8X16;
+
+  import huawei-aaa {
+    prefix aaa;
+  }
+
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference "Huawei private.";
+  }
+  revision 2017-12-23 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference "Huawei private.";
+  }
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference "Huawei private.";
+  }
+  revision 2013-01-01 {
+    description
+      "Init revision";
+    reference "Huawei private.";
+  }
+
+  typedef aaaUserAccessType-deviations {
+    type enumeration {
+      enum "invalid" {
+        description
+          "invalid user access type.";
+      }
+      enum "terminal" {
+        description
+          "terminal user access type.\n";
+      }
+      enum "telnet" {
+        description
+          "User access type is telnet.\n";
+      }
+      enum "ftp" {
+        description
+          "User access type ftp.";
+      }
+      enum "ppp" {
+        description
+          "User access type ppp.";
+      }
+      enum "ssh" {
+        description
+          "User access type ssh.";
+      }
+      enum "qx" {
+        description
+          "User access type qx.";
+      }
+      enum "snmp" {
+        description
+          "User access type snmp.";
+      }
+      enum "mml" {
+        description
+          "User access type mml.";
+      }
+      enum "http" {
+        description
+          "User access type http.";
+      }
+    }
+    description
+      "";
+  }
+
+  deviation "/aaa:aaa/aaa:aliveUserQrys/aaa:aliveUserQry/aaa:appType" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:authenPolicy" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:authenticationSchemes/aaa:authenticationScheme/aaa:radiusAuthenticationType" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:domains/aaa:domain/aaa:dot1xTemplateId" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:passwordPolicy/aaa:expiredPwdReuseNum" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:passwordPolicy/aaa:historyPwdNum" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:passwordPolicy/aaa:pwdExpireDays" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:idleTimeout" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:serviceDot1x" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:lctUserInterface" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:domains/aaa:domain/aaa:serviceDot1x" {
+    deviate not-supported;
+  }
+  deviation "/aaa:changeMyIdleTimeout" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:aliveUserQrys/aaa:aliveUserQry/aaa:accessType" {
+    deviate replace {
+      type aaa-devs-CH-CX-X8X16:aaaUserAccessType-deviations;
+    }
+  }
+  deviation "/aaa:aaa/aaa:authenticationSchemes/aaa:authenticationScheme/aaa:firstAuthenMode" {
+    deviate replace {
+      default "radius";
+    }
+  }
+  deviation "/aaa:aaa/aaa:accountingSchemes/aaa:accountingScheme/aaa:accountingMode" {
+    deviate replace {
+      default "radius";
+    }
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:loginFailedLimit/aaa:failedTimes" {
+    deviate replace {
+      default "3";
+    }
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:failedTimes" {
+    deviate replace {
+      default "3";
+    }
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:failedTimes" {
+    deviate replace {
+      type uint64 {
+        range "1..10";
+      }
+    }
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:interval" {
+    deviate replace {
+      default "5";
+    }
+  }
+  deviation "/aaa:aaa/aaa:lam/aaa:users/aaa:user/aaa:interval" {
+    deviate replace {
+      type uint64 {
+        range "1..65535";
+      }
+    }
+  }
+  deviation "/aaa:aaa/aaa:offlineQrys" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:onlineFailQrys" {
+    deviate not-supported;
+  }
+  deviation "/aaa:resetOnlineFailOrOfflineRecord" {
+    deviate not-supported;
+  }
+  deviation "/aaa:aaa/aaa:abnormalOfflineQrys" {
+    deviate not-supported;
+  }
+}

@@ -1,0 +1,106 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+submodule huawei-aaa-action {
+  belongs-to huawei-aaa {
+    prefix aaa;
+  }
+  import huawei-extension {
+    prefix ext;
+  }
+  include huawei-aaa-type;
+  include huawei-aaa-lam-action;
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Description of aaa action submodule";
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-12-23 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  revision 2013-01-01 {
+    description
+      "Init revision";
+    reference
+      "Huawei private.";
+  }
+  rpc cutUserByDomain {
+    description
+      "Cut all access users by specified domain name.";
+    ext:node-ref "/aaa/aliveUserQrys/aliveUserQry";
+    input {
+      leaf domainName {
+        type string {
+          length "1..64";
+        }
+        mandatory true;
+        description
+          "Name of a domain, it is not case sensitive.";
+      }
+    }
+  }
+  rpc cutUserByUserId {
+    description
+      "Cut all access users by specified range of user id.";
+    ext:node-ref "/aaa/aliveUserQrys/aliveUserQry";
+    input {
+      leaf beginUserId {
+        type uint32;
+        mandatory true;
+        description
+          "Start user ID, which specifies a range with the end user ID. Users within this range will be disconnected.";
+      }
+      leaf endUserId {
+        type uint32;
+        description
+          "End user ID, which specifies a range with the start user ID. Users within this range will be disconnected. This ID cannot be smaller than the start user ID.";
+      }
+    }
+  }
+  rpc cutUserByUserName {
+    description
+      "Cut all access users by specified user name.";
+    ext:node-ref "/aaa/aliveUserQrys/aliveUserQry";
+    input {
+      leaf userName {
+        type string {
+          length "1..253";
+        }
+        mandatory true;
+        description
+          "Name of a alive user to be cut, it is not case sensitive.";
+      }
+    }
+  }
+  rpc resetOnlineFailOrOfflineRecord {
+    description
+      "Reset online fail or offline record.";
+    input {
+      leaf recType {
+        type offlineRecordType;
+        mandatory true;
+        description
+          "";
+      }
+    }
+  }
+}

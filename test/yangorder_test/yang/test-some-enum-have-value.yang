@@ -1,0 +1,92 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module test-some-enum-have-value {
+  namespace "http://www.huawei.com/netconf/vrp/test-some-enum-have-value";
+  prefix some_enum_have_value;
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  
+  typedef statusType {
+    type enumeration {
+      enum "d" {
+        description
+          "status d";
+      }
+      enum "c" {
+        description
+          "status c";
+      }
+      enum "b" {
+        description
+          "status b";
+          value 3;
+      }
+      enum "a" {
+        description
+          "status a";
+          value 7;
+      }
+    }
+    description
+      "";
+  }
+  
+   typedef lastStatusType {
+    type enumeration {
+      enum "d" {
+        description
+          "status d.";
+      }
+      enum "D" {
+        description
+          "status D.";
+      }
+      enum "c" {
+        description
+          "status c.";
+      }
+      enum "b" {
+        description
+          "status b.";
+      }
+      enum "a" {
+        description
+          "status a";
+      }
+      enum "B" {
+        description
+          "status B.";
+      }
+    }
+    description
+      "";
+  }
+  
+  container aaa {
+    description
+      "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+      
+      leaf current-status{
+        type statusType;
+        description "current status";
+      }
+      
+      leaf last-status {
+        type lastStatusType;
+        description "last status";
+      }
+  }
+}

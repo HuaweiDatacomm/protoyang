@@ -1,0 +1,46 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module test-common {
+  namespace "http://www.huawei.com/netconf/vrp/test-common";
+  prefix common;
+  
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2017-03-23 {
+    description
+      "Functions supported by the schema are added to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+
+  container aaa {
+    description
+      "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+    container tasks {
+      config false;
+      description
+        "List of tasks.";
+      list task {
+        key "taskName";
+        config false;
+        description
+          "Minimum unit for dividing rights on an NE. Tasks can be determined when an NE is delivered. Tasks cannot be customized.";
+        leaf taskName {
+            type string {
+            length "1..32";
+          }
+          config false;
+          description
+            "Name of a task, it is not case sensitive.";
+        }
+      }
+    }
+  }
+}

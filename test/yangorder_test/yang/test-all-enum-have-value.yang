@@ -1,0 +1,70 @@
+/*
+Copyright (C) 2013-2018 Huawei Technologies Co., Ltd. All rights reserved.
+*/
+module test-all-enum-have-value {
+  namespace "http://www.huawei.com/netconf/vrp/test-all-enum-have-value";
+  prefix all_enum_have_value;
+  organization
+    "Huawei Technologies Co., Ltd.";
+  contact
+    "Huawei Industrial Base Bantian, Longgang Shenzhen 518129                    
+        People's Republic of China                    
+        Website: http://www.huawei.com Email: support@huawei.com";
+  description
+    "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+  revision 2018-06-11 {
+    description
+      "The modifications in the schema file are synchronized to the YANG file.";
+    reference
+      "Huawei private.";
+  }
+  
+  typedef statusType {
+    type enumeration {
+      enum "a" {
+        description
+          "Blocked state.";
+          value 1;
+      }
+      enum "b" {
+        description
+          "Activated state.";
+          value 2;
+      }
+      enum "c" {
+        description
+          "Blocked state.";
+          value 3;
+      }
+      enum "d" {
+        description
+          "Blocked state.";
+          value 5;
+      }
+    }
+    description
+      "";
+  }
+  
+  container aaa {
+    description
+      "Security management, which includes the management on authentication, authorization, accounting, domains, and users.";
+      
+      leaf current-status{
+        type statusType;
+        description "current status";
+      }
+      
+      leaf last-status {
+        type enumeration {
+          enum enabled {
+            value 1;
+          }
+          enum disabled {
+            value 2;
+          }
+        }
+        description "last status";
+      }
+  }
+}
