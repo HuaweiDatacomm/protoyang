@@ -110,7 +110,7 @@ class Proto_writer():
         return True
 
     def file_write(self, file, str):
-        file.write(str)
+        file.write(str.decode('utf-8'))
         self.crt_line_num += 1
         return True
 
@@ -511,13 +511,18 @@ class Proto_writer():
             filename = self.proto_file.ref
         logging.info(
             "==============================START OUPUT PROTO %s===================================" % filename)
-        with open(filename, "w", encoding="utf-8") as file:
-            self.output_heads(file)
-            self.delete_invalid_definions(self.proto_file.definions)
-            self.sort_definions(self.proto_file.definions)
-            if self.proto_file.definions:
-                for proto_file_definion in self.proto_file.definions.values():
-                    del_same_node_in_proto(proto_file_definion)
-            self.output_definions(self.proto_file.definions, file)
-            self.output_annotations_end(file, self.proto_file.i_annotations)
+        if sys.version_info[0] == 2:
+            file = io.open(filename, "w", encoding="utf-8")
+        else:
+            file = open(filename, "w", encoding="utf-8")
+
+        self.output_heads(file)
+        self.delete_invalid_definions(self.proto_file.definions)
+        self.sort_definions(self.proto_file.definions)
+        if self.proto_file.definions:
+            for proto_file_definion in self.proto_file.definions.values():
+                del_same_node_in_proto(proto_file_definion)
+        self.output_definions(self.proto_file.definions, file)
+        self.output_annotations_end(file, self.proto_file.i_annotations)
+        file.close()
         return True
