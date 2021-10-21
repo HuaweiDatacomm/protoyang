@@ -698,7 +698,8 @@ class Yang_proto_converter():
 
 
 
-    def generate_proto_custom(self, yang_module):
+    def generate_proto_custom(self, yang_module):        if not hasattr(yang_module,'i_children'):
+            return
         if not yang_module.i_children:
             return
         if not yang_module.keyword == 'module':
